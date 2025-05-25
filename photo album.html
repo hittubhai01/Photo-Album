@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Make Your Photo Album</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amita:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: #111 url('https://res.cloudinary.com/ritalbradley/image/upload/v1657644013/pexels-elijah-o_donnell-3473569_o7ohfd.jpg') center center/cover no-repeat;
+      color: white;
+      font-family: 'Amita', cursive;
+      text-align: center;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin: 20px 0;
+      border-bottom: 5px double #fff;
+      display: inline-block;
+    }
+
+    .controls {
+      margin: 20px;
+    }
+
+    input[type="file"],
+    select,
+    button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 1rem;
+    }
+
+    .album-grid {
+      display: grid;
+      gap: 10px;
+      margin: 20px;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .album-grid img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border: 4px solid #fff;
+      border-radius: 10px;
+    }
+
+    footer {
+      background-color: #222;
+      padding: 10px;
+      color: white;
+      position: relative;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Make Your Photo Album</h1>
+
+  <div class="controls">
+    <label for="grid-select">Select Grid Type:</label>
+    <select id="grid-select">
+      <option value="2x2">2x2 Grid</option>
+      <option value="3x3">3x3 Grid</option>
+      <option value="4x4">4x4 Grid</option>
+      <option value="collage">Collage Layout</option>
+    </select>
+
+    <input type="file" id="imageUpload" multiple accept="image/*">
+    <button onclick="generateAlbum()">Generate Album</button>
+  </div>
+
+  <div id="album" class="album-grid"></div>
+
+  <footer>Created by Hitesh Yadav</footer>
+
+  <script>
+    function generateAlbum() {
+      const files = document.getElementById('imageUpload').files;
+      const gridType = document.getElementById('grid-select').value;
+      const album = document.getElementById('album');
+      
+      album.innerHTML = '';
+
+      if (!files.length) {
+        alert("Please upload images.");
+        return;
+      }
+
+      switch (gridType) {
+        case '2x2':
+          album.style.gridTemplateColumns = 'repeat(2, 1fr)';
+          break;
+        case '3x3':
+          album.style.gridTemplateColumns = 'repeat(3, 1fr)';
+          break;
+        case '4x4':
+          album.style.gridTemplateColumns = 'repeat(4, 1fr)';
+          break;
+        case 'collage':
+          album.style.gridTemplateColumns = 'repeat(auto-fill, minmax(200px, 1fr))';
+          break;
+      }
+
+      for (let file of files) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          album.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+</body>
+</html>
